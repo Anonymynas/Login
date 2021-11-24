@@ -1,8 +1,31 @@
 from tkinter import *
 from tkinter import messagebox
 import os
+import pandas as pd
+import numpy as np
+from sklearn.feature_extraction.text import CountVectorizer 
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import MultinomialNB 
 
+#Import dataset
+data = pd.read_csv("https://raw.githubusercontent.com/amankharwal/SMS-Spam-Detection/master/spam.csv", encoding= 'latin-1')
+data.head()
+data = data[['class','message']]
+#train dataset
+x = np.array(data["message"])
+y = np.array(data["class"])
+cv = CountVectorizer()
+X = cv.fit_transform(x) 
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42)
+clf = MultinomialNB()
+clf.fit(X_train,y_train)
 
+#display
+#sample = input('Enter a message:')
+#data = cv.transform([sample]).toarray()
+#print(clf.predict(data))
+
+######################################################################################################################################
 #login GUI
 def main_menu():
     global main_screen
@@ -86,10 +109,20 @@ def admin_login_verify():
 def user_login_verify():
     username1 = username_verify.get()
     password1 = password_verify.get()
-    if(username1 == 'User' and password1 == '1234'):
-        messagebox.showinfo("", "Login To Admin")
+    if(username1 == 'user' and password1 == '1234'):
+        user_page()
     else:
         messagebox.showinfo("", "Incorrect Username / Password ")
-        
+
+#user page
+def user_page():
+    global user_page
+    user_page = Toplevel(main_screen)
+    user_page.title("SPAM DETECTION SYSTEM")
+    user_page.geometry("700x700")
+    Label(user_page, text="WELCOME TO", font="20",fg="black").pack()
+    Label(user_page, text="SPAM DETECTION SYSTEM", font="20",fg="black").pack()
+    
+
 main_menu()
  
