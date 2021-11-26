@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 from tkinter import messagebox
 
+
 #List of the symptoms is listed here in list l1.
 
 l1=['back_pain','constipation','abdominal_pain','diarrhoea','mild_fever','yellow_urine',
@@ -88,8 +89,8 @@ tr.replace({'prognosis':{'Fungal infection':0,'Allergy':1,'GERD':2,'Chronic chol
 X_test= tr[l1]
 y_test = tr[["prognosis"]]
 
-#print(y_test)
 
+#print(y_test)
 np.ravel(y_test)
 def DecisionTree():
     
@@ -103,7 +104,7 @@ def DecisionTree():
     print(accuracy_score(y_test, y_pred))
     print(accuracy_score(y_test, y_pred,normalize=False))
 
-    psymptoms = [Symptom1.get(),Symptom2.get(),Symptom3.get(),Symptom4.get(),Symptom5.get()]
+    psymptoms = [symptom1.get(),symptom2.get(),symptom3.get(),symptom4.get(),symptom5.get()]
 
     for k in range(0,len(l1)):
         for z in psymptoms:
@@ -140,7 +141,7 @@ def randomforest():
     print(accuracy_score(y_test, y_pred))
     print(accuracy_score(y_test, y_pred,normalize=False))
     
-    psymptoms = [Symptom1.get(),Symptom2.get(),Symptom3.get(),Symptom4.get(),Symptom5.get()]
+    psymptoms = [symptom1.get(),symptom2.get(),symptom3.get(),symptom4.get(),symptom5.get()]
 
     for k in range(0,len(l1)):
         for z in psymptoms:
@@ -164,42 +165,36 @@ def randomforest():
         t2.delete("1.0", END)
         t2.insert(END, "Not Found")
 
-
 def NaiveBayes():
     from sklearn.naive_bayes import GaussianNB
     gnb = GaussianNB()
     gnb=gnb.fit(X,np.ravel(y))
-
     from sklearn.metrics import accuracy_score
     y_pred=gnb.predict(X_test)
     print(accuracy_score(y_test, y_pred))
     print(accuracy_score(y_test, y_pred,normalize=False))
-
-    psymptoms = [Symptom1.get(),Symptom2.get(),Symptom3.get(),Symptom4.get(),Symptom5.get()]
+    psymptoms = [symptom1.get(),symptom2.get(),symptom3.get(),symptom4.get(),symptom5.get()]
     for k in range(0,len(l1)):
         for z in psymptoms:
             if(z==l1[k]):
                 l2[k]=1
-
     inputtest = [l2]
     predict = gnb.predict(inputtest)
     predicted=predict[0]
-
     h='no'
     for a in range(0,len(disease)):
         if(predicted == a):
             h='yes'
             break
-
     if (h=='yes'):
         t3.delete("1.0", END)
         t3.insert(END, disease[a])
     else:
         t3.delete("1.0", END)
         t3.insert(END, "Not Found")
-
-# GUI stuff..............................................................................
- #login GUI
+    
+# GUI stuff..............................................................................    symptom1.set("Select Here") 
+ #login GUI    
 def main_menu():
     global main_screen
     main_screen = Tk()
@@ -283,101 +278,100 @@ def user_login_verify():
     username1 = username_verify.get()
     password1 = password_verify.get()
     if(username1 == 'user' and password1 == '1234'):
-        user_interface()
+        user_page_display()
     else:
         messagebox.showinfo("", "Incorrect Username / Password ")
 
-        
-def user_interface():
-    
-    user_interface = Toplevel(main_screen)
-    
+#user page
+def user_page_display():
+    global user_page
+    user_page = Toplevel(main_screen)
+    user_page.title("SPAM DETECTION SYSTEM")
+    user_page.configure(background='black')
+    global symptom1
+    symptom1 = StringVar()
+    symptom1.set("Select Here")
+    global symptom2
+    symptom2 = StringVar()
+    symptom2.set("Select Here")
+    global symptom3
+    symptom3 = StringVar()
+    symptom3.set("Select Here")
+    global symptom4
+    symptom4 = StringVar()
+    symptom4.set("Select Here")
+    global symptom5
+    symptom5 = StringVar()
+    symptom5.set("Select Here")
     Name = StringVar()
-
-    w2 = Label(user_interface, justify=LEFT, text="Disease Predictor", fg="white", bg="black")
+    w2 = Label(user_page, justify=LEFT, text="Disease Predictor using Machine Learning", fg="Red", bg="White")
     w2.config(font=("Times",30,"bold italic"))
-    w2.grid(row=1, column=0, columnspan=2, padx=200)
-
-    NameLb = Label(user_interface, text="Name of the Patient :", fg="white", bg="Black")
+    w2.grid(row=1, column=0, columnspan=2, padx=100)
+    w2 = Label(user_page, justify=LEFT, text="A Project by Shrimad Mishra", fg="Pink", bg="Blue")
+    w2.config(font=("Times",30,"bold italic"))
+    w2.grid(row=2, column=0, columnspan=2, padx=100)
+    NameLb = Label(user_page, text="Name of the Patient", fg="Red", bg="Sky Blue")
     NameLb.config(font=("Times",15,"bold italic"))
     NameLb.grid(row=6, column=0, pady=15, sticky=W)
-
-    S1Lb = Label(user_interface, text="Symptom 1", fg="white", bg="black")
+    S1Lb = Label(user_page, text="Symptom 1", fg="Blue", bg="Pink")
     S1Lb.config(font=("Times",15,"bold italic"))
     S1Lb.grid(row=7, column=0, pady=10, sticky=W)
-
-    S2Lb = Label(user_interface, text="Symptom 2", fg="White", bg="black")
+    S2Lb = Label(user_page, text="Symptom 2", fg="White", bg="Purple")
     S2Lb.config(font=("Times",15,"bold italic"))
     S2Lb.grid(row=8, column=0, pady=10, sticky=W)
-
-    S3Lb = Label(user_interface, text="Symptom 3", fg="White",bg="black")
+    S3Lb = Label(user_page, text="Symptom 3", fg="Green",bg="white")
     S3Lb.config(font=("Times",15,"bold italic"))
     S3Lb.grid(row=9, column=0, pady=10, sticky=W)
-
-    S4Lb = Label(user_interface, text="Symptom 4", fg="white", bg="black")
+    S4Lb = Label(user_page, text="Symptom 4", fg="blue", bg="Yellow")
     S4Lb.config(font=("Times",15,"bold italic"))
     S4Lb.grid(row=10, column=0, pady=10, sticky=W)
-
-    S5Lb = Label(user_interface, text="Symptom 5", fg="white", bg="black")
+    S5Lb = Label(user_page, text="Symptom 5", fg="purple", bg="light green")
     S5Lb.config(font=("Times",15,"bold italic"))
     S5Lb.grid(row=11, column=0, pady=10, sticky=W)
-
-
-    lrLb = Label(user_interface, text="DecisionTree", fg="white", bg="black")
+    lrLb = Label(user_page, text="DecisionTree", fg="white", bg="red")
     lrLb.config(font=("Times",15,"bold italic"))
     lrLb.grid(row=15, column=0, pady=10,sticky=W)
-
-    destreeLb = Label(user_interface, text="RandomForest", fg="Red", bg="Orange")
+    destreeLb = Label(user_page, text="RandomForest", fg="Red", bg="Orange")
     destreeLb.config(font=("Times",15,"bold italic"))
     destreeLb.grid(row=17, column=0, pady=10, sticky=W)
-
-    ranfLb = Label(user_interface, text="NaiveBayes", fg="White", bg="green")
+    ranfLb = Label(user_page, text="NaiveBayes", fg="White", bg="green")
     ranfLb.config(font=("Times",15,"bold italic"))
     ranfLb.grid(row=19, column=0, pady=10, sticky=W)
-
     OPTIONS = sorted(l1)
-
-    NameEn = Entry(user_interface, textvariable=Name)
+    NameEn = Entry(user_page, textvariable=Name)
     NameEn.grid(row=6, column=1)
-
-    S1 = OptionMenu(user_interface, Symptom1,*OPTIONS)
+    S1 = OptionMenu(user_page, symptom1,*OPTIONS)
     S1.grid(row=7, column=1)
-
-    S2 = OptionMenu(user_interface, Symptom2,*OPTIONS)
+    S2 = OptionMenu(user_page, symptom2,*OPTIONS)
     S2.grid(row=8, column=1)
-
-    S3 = OptionMenu(user_interface, Symptom3,*OPTIONS)
+    S3 = OptionMenu(user_page, symptom3,*OPTIONS)
     S3.grid(row=9, column=1)
-
-    S4 = OptionMenu(user_interface, Symptom4,*OPTIONS)
+    S4 = OptionMenu(user_page, symptom4,*OPTIONS)
     S4.grid(row=10, column=1)
-
-    S5 = OptionMenu(user_interface, Symptom5,*OPTIONS)
+    S5 = OptionMenu(user_page, symptom5,*OPTIONS)
     S5.grid(row=11, column=1)
-
-
-    dst = Button(user_interface, text="Prediction 1", command=DecisionTree,bg="Red",fg="yellow")
+    dst = Button(user_page, text="Prediction 1", command=DecisionTree,bg="Red",fg="yellow")
     dst.config(font=("Times",15,"bold italic"))
     dst.grid(row=8, column=3,padx=10)
-
-    rnf = Button(user_interface, text="Prediction 2", command=randomforest,bg="White",fg="green")
+    rnf = Button(user_page, text="Prediction 2", command=randomforest,bg="White",fg="green")
     rnf.config(font=("Times",15,"bold italic"))
     rnf.grid(row=9, column=3,padx=10)
-
-    lr = Button(user_interface, text="Prediction 3", command=NaiveBayes,bg="Blue",fg="white")
+    lr = Button(user_page, text="Prediction 3", command=NaiveBayes,bg="Blue",fg="white")
     lr.config(font=("Times",15,"bold italic"))
     lr.grid(row=10, column=3,padx=10)
 
-
-    t1 = Text(user_interface, height=1, width=40,bg="Light green",fg="red")
+    global t1 
+    t1 = Text(user_page, height=1, width=40,bg="Light green",fg="red")
     t1.config(font=("Times",15,"bold italic"))
     t1.grid(row=15, column=1, padx=10)
 
-    t2 = Text(user_interface, height=1, width=40,bg="White",fg="Blue")
+    global t2
+    t2 = Text(user_page, height=1, width=40,bg="White",fg="Blue")
     t2.config(font=("Times",15,"bold italic"))
     t2.grid(row=17, column=1 , padx=10)
 
-    t3 = Text(user_interface, height=1, width=40,bg="red",fg="white")
+    global  t3
+    t3 = Text(user_page, height=1, width=40,bg="red",fg="white")
     t3.config(font=("Times",15,"bold italic"))
     t3.grid(row=19, column=1 , padx=10)
 
